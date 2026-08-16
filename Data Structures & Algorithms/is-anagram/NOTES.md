@@ -45,8 +45,9 @@ Pattern to pocket: **when the alphabet is bounded, use an array indexed by
 - `sizes_s` → Go locals are lowerCamel (`countS`), no snake_case.
 - Two params of one type: `func isAnagram(s, t string)`.
 
-## Open question
+## Failed attempts
 
-What were attempts 1 and 6 (not synced — failed)? Compile error / wrong
-answer / which trap? Failed attempts are the learning signature; worth a line
-here when remembered.
+1 and 6 were wrong answers (test cases failed), not compile errors — the Go
+compiled; the logic didn't survive the judge. Specific breaking case not
+recalled; likely candidates given the surviving code: unequal lengths, or a
+char present in `t` only (the case one-directional count comparison misses).
