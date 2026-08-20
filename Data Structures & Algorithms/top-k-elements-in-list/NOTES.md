@@ -1,25 +1,31 @@
-# Review notes — top-k-elements-in-list (submission-2) — HINTS ONLY
+# Review notes — top-k-elements-in-list (submissions 2–4)
 
-Hints-only by request; full review after next iteration.
+**Verdict:** sub-4 is the canonical O(n) bucket solution, derived from hints
+alone across three iterations. Best problem of the prep so far.
 
-**Credit:** constraint comments at the top (the pre-flight ritual, now habit);
-the counts→inversion insight is the heart of the optimal answer.
+## The arc
 
-## Hints
+- sub-2: map[freq][]num + sort of unique freqs, m/index counter gymnastics,
+  latent tie-at-cutoff overflow (masked by the unique-answer guarantee).
+- sub-3: renamed shadowing loop var (`freq`), replaced counters with
+  `len(output) == k` early return — which deleted the latent bug as a side
+  effect. Simpler and safer were the same edit.
+- sub-4: derived the bound ("frequency can only be as large as the number of
+  items"), swapped map+sort for a bucket slice indexed by frequency, walked
+  backwards. Sort deleted, O(n log n) → O(n).
 
-1. Hand-trace the inner collection loop with nums=[1,1,2,2], k=1. How many
-   elements land in output? Tests guarantee unique answers so this never
-   fires here — but the tie-at-cutoff question is coming in an interview.
-   One condition fixes it.
-2. `for k := range values` shadows the parameter k. Harmless here — the
-   dangerous kind. Rename. (Drill F12 preview.)
-3. The m/index double countdown computing k-index to move forward: find the
-   single readable condition that says "collection done" (something already
-   knows its own length) and both counters vanish.
-4. THE hint: what is the maximum value a frequency can take, given
-   len(nums)? When keys are small dense ints with a known bound, what
-   container indexes by them directly — no hash, no sort? The buckets are
-   already built; they're in the wrong container. The sort import should
-   delete itself.
-5. Idiom, for later: sort.Sort(sort.Reverse(sort.IntSlice(x))) →
-   sort.Ints / slices.Sort + walk backwards.
+## Pattern to pocket
+
+Same move as anagram-groups sub-3→4: the idea was already present, stored in
+the wrong container. **When map keys are small dense bounded ints, a slice
+indexed by the key replaces map + sort.** Third appearance of
+bounded-domain-beats-hashing ([26]int counts, [26]int key, freq buckets).
+
+## Cosmetic residue
+
+- `make([][]int, n+1, n+1)` → `make([][]int, n+1)` (third arg only when
+  cap > len).
+- `values` named for its map life; it's `buckets` now.
+- buckets[0] is permanently empty (no zero frequencies) — fine, know it.
+- Constraint-comment ritual at top: retained, now includes the bound
+  derivation. Keep this habit forever.
