@@ -26,24 +26,24 @@ re-read before the block do-over and before any timed session.
 
 ## Go semantics
 
-5. **Comma-ok vs direct indexing**: `if m[k]` only when the zero value can
+6. **Comma-ok vs direct indexing**: `if m[k]` only when the zero value can
    never be legitimate data (bool sets). Indices/counts: comma-ok, always
    — 0 is real data.
-6. **Set idiom**: `map[T]struct{}` (zero bytes, states intent).
-7. **Comparability**: arrays & all-comparable-field structs hash contents;
+7. **Set idiom**: `map[T]struct{}` (zero bytes, states intent).
+8. **Comparability**: arrays & all-comparable-field structs hash contents;
    pointers hash identity (mutating pointee is safe, equal contents ≠ same
    key); slices/maps/funcs never — a slice field poisons a struct key.
-8. **var vs make**: nil slices fully work (append/len/range) → `var`;
+9. **var vs make**: nil slices fully work (append/len/range) → `var`;
    nil maps read but PANIC on write → `make`. Cap arg only when cap > len.
-9. **bytes vs runes**: `s[i]` byte, `range s` rune. Byte-indexing is right
+10. **bytes vs runes**: `s[i]` byte, `range s` rune. Byte-indexing is right
    only under an ASCII constraint — state the constraint when leaning on it.
-10. **Perf lever = allocations in hot loops, not function calls** (calls
+11. **Perf lever = allocations in hot loops, not function calls** (calls
     are ns and inline; a map alloc per pair was the real cost).
 
 ## Process
 
-11. **Pre-flight ritual**: constraint comments + "what breaks this?" before
+12. **Pre-flight ritual**: constraint comments + "what breaks this?" before
     running. Attempt-1 failures (edge cases) stopped once this started.
-12. **Failed attempts are the signature** — record what attempt 1 died of.
-13. Write locally with gofmt-on-save; paste to judge. Delete dead code
+13. **Failed attempts are the signature** — record what attempt 1 died of.
+14. Write locally with gofmt-on-save; paste to judge. Delete dead code
     before submitting.
