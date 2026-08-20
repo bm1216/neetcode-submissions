@@ -20,10 +20,13 @@ fire on its purest case. Swap both for make([]int, len(nums)). Lesson: the
 pattern is learned but not yet automatic under new-problem pressure. The
 do-over exists for exactly this.
 
-## Open follow-up
+## Follow-up: CLOSED (submission 3)
 
-O(1) extra space (output array excluded). One array becomes the output.
-The other becomes a single running variable on the backward pass.
+Reached the optimal form unprompted past the hint: both directions run on a
+single variable, the output array receives left products then absorbs right
+products in the backward pass. O(n) time, O(1) extra space. Also retired
+both recurring style notes (dead underscore, redundant cap) and the maps in
+the same submission. Problem complete at the highest level.
 
 ## Recurring style (third appearance each — retire these)
 
