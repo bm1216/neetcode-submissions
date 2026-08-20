@@ -24,6 +24,14 @@ canonical.
    the O(n²) rebuild. Also strconv.Itoa over Sprintf.
 6. fmt.Println shipped in a submission again. Second offence.
 
+## Submission 12 (post-review iteration)
+
+Four of six fixes applied. Marker deleted, defensive check deleted, byte
+digit conversion, slices in decode. Format is now `12go14neet`. The length
+parse via `Atoi(encoded[j:j+digits])` improves on the suggested per-digit
+loop. Still open: Builder in Encode, and fmt.Println shipped a third time
+(now a workflow fix: grep for Println pre-submit). Decode is do-over ready.
+
 ## Credit
 
 - Receiver shadow from sub-4 fixed (`for _, str := range strs`).
