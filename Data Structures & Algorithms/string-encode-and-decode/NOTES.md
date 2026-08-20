@@ -1,35 +1,39 @@
-# Review notes — string-encode-and-decode (submission-4) — HINTS
+# Review notes — string-encode-and-decode (submissions 4, 7)
 
-Accepted but breakable; his own "not proud" verdict is correct. Full review
-after redesign.
+**Verdict:** submission 7 is correct and survives both breaking inputs that
+killed submission 4. The design is his own invention, not the canonical one.
 
-## Two legal inputs that break it
+## The design
 
-- `["-100"]` → encodes to `"-100"` → decodes to `[]` (empty-array sentinel
-  collides with real data)
-- `["a#!~/100b"]` → Split shreds the stored string (delimiter collision)
+Canonical: `4#neet`, decoder scans digits until the marker.
+His: `#14neet`. One marker byte, one byte for "how many digits the length
+has", the length digits, then the data. The decoder never scans. It reads
+fixed-width metadata and jumps. This is a length-of-length header, the same
+shape as many binary protocols. Legitimate and arguably cleaner than
+canonical.
 
-Same disease twice: **in-band signalling**. Any marker living in the data
-channel can be forged by data. A weirder delimiter lowers probability;
-never reaches zero. Design problem = adversarial correctness, so "unlikely"
-= wrong.
+## Fixes for the do-over
 
-## Hint
+1. The `#` is skipped, never read, never verified. Delete it or verify it.
+2. Remove the defensive digit check inside the length loop. The encoder
+   wrote exactly `digits` digit bytes. Parse by construction.
+3. `int(encoded[j] - '0')` replaces Sprintf + Atoi for single digits.
+4. Decode: `encoded[j : j+length]` replaces the byte-by-byte Builder copy.
+   Substrings are free. New header, same bytes.
+5. Encode: this is where strings.Builder belongs. `output +=` in a loop is
+   the O(n²) rebuild. Also strconv.Itoa over Sprintf.
+6. fmt.Println shipped in a submission again. Second offence.
 
-How does an HTTP response bound a body that can contain anything?
-What information, placed AHEAD of each string, answers "where does it
-stop?" without inspecting contents? Note the empty array then needs no
-sentinel at all.
+## Credit
 
-## Hygiene
+- Receiver shadow from sub-4 fixed (`for _, str := range strs`).
+- Empty list needs no sentinel now. It encodes to "" naturally.
+- Empty string elements work (`#10`), verified by trace.
 
-- `fmt.Println(input)` shipped in Decode — delete debug output.
-- `for idx, s := range strs` shadows receiver `s` — THIRD shadowing
-  sighting (param k in top-k, now this). Watch for it; F12 incoming.
-- `output += s` in a loop is O(n²) rebuild — strings.Builder is the tool,
-  first natural use case in the list.
+## History thread
 
-## Also today
-
-top-k submission-5: pre-sized the frequency map same day as the review
-note. Feedback→habit latency of hours.
+Sub-4 was a C string (in-band marker, forgeable by data). Sub-7 is a Pascal
+string, evolved (length ahead of data, plus a fixed-width length-of-length).
+Discussion along the way covered C's null terminator, decay, the (pointer,
+length) convention, Go's string header, and the null-prefix certificate
+attack as the cost of two parsers disagreeing.
