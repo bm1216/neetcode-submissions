@@ -19,6 +19,11 @@ re-read before the block do-over and before any timed session.
    ≤ len(nums) is what justifies buckets. Say the derivation out loud in
    interviews.
 
+5. **Prefix/suffix precomputation** (product-except-self): when answer[i]
+   combines "everything left of i" and "everything right of i", build both
+   with running passes. Neighbours differ by one operation. The division
+   solution needed a zero case tree. This shape needed none.
+
 ## Go semantics
 
 5. **Comma-ok vs direct indexing**: `if m[k]` only when the zero value can
