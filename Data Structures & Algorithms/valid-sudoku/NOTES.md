@@ -26,3 +26,19 @@ this time, which is the ritual starting to work.
 [9]int arrays only answer seen/not-seen. Nine bits in one int does the
 same. His own Apple Notes bitwise note covers the needed ops. Trading-firm
 interviewers enjoy the bitmask version.
+
+## Submissions 5 and 13 (post-review iterations)
+
+Sub-5: check-before-insert applied to all three checks, scan-after loops
+deleted. Sub-13: rows+cols merged into one scan via the transpose read
+(board[i][j] and board[j][i] in the same loop), [9][9]bool arrays adopted.
+Boxes still a separate odometer scan — the box-identity merge stays a
+do-over item.
+
+Costs observed: eight attempts between 5 and 13, almost certainly on the
+transpose indexing. Cure prescribed: extract `d := int(board[i][j]-'0')-1`
+into a named local per branch. The expression appears six times with two
+index orders — every repetition is a chance to swap the wrong pair.
+
+fmt.Println shipped a FIFTH time (column branch, sub-13). Escalated from
+note to rule: grep the file for Println before every paste. No exceptions.
