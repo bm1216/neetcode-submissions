@@ -42,3 +42,15 @@ index orders — every repetition is a chance to swap the wrong pair.
 
 fmt.Println shipped a FIFTH time (column branch, sub-13). Escalated from
 note to rule: grep the file for Println before every paste. No exceptions.
+
+## Submission 15 — single pass reached
+
+Boxes merged via box := (i/3)*3 + (j/3). Odometer walk deleted. One scan,
+three [9][9]bool structures, exit at first duplicate. Canonical solution.
+Full arc: three scans + count-then-check (sub-3) → check-before-insert
+(sub-5) → rows+cols transpose merge (sub-13) → single pass (sub-15).
+
+Comprehension check issued: derive the box formula, don't remember it.
+Remaining do-over polish: extract d per branch (expression still appears
+seven times), which also allows the combined check
+`if rows[i][d] || boxes[box][d]`.
